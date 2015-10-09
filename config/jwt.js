@@ -2,7 +2,7 @@ var jwt = require('jsonwebtoken');
 
 var config = require('config');
 var secret = config.JWT_SECRET;
-console.log(secret);
+
 
 exports.sign = function(userId){
 	var token = jwt.sign({
@@ -12,8 +12,9 @@ exports.sign = function(userId){
 	return token;
 };
 
-exports.verify = function(token){
+exports.verify = function(token,done){
 	jwt.verify(token,secret,function(err,decoded){
-		return decoded;
+		if(err) return done(err);
+		return done(null,decoded);
 	});
 };

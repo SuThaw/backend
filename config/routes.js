@@ -1,5 +1,6 @@
 var users = require('users');
-var jwtLibrary = require('./jwt')
+var jwtLibrary = require('./jwt');
+var auth = require('./middlewares/authorization');
 
 module.exports = function(app,passport){
 	// app.get('/',function(req,res){
@@ -19,5 +20,9 @@ module.exports = function(app,passport){
 
 				return res.json({success:true,message:'Enjoy your token',token:token});
 			})(req,res,next);
+	});
+
+	app.get('/',auth.requireLogin,function(req,res,next){
+		return res.send('you made it');
 	});
 }
