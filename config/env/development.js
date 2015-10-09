@@ -20,7 +20,8 @@ if (fs.existsSync(envFile)) {
 
 
 module.exports = {
-	db: process.env.DB  
+	db: process.env.DB ,
+	JWT_SECRET : process.env.JWT_SECRET 
 };
 
 

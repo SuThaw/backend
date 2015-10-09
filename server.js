@@ -9,6 +9,8 @@ var config = require('config');
 var mongoose = require('mongoose');
 var passport = require('passport');
 
+
+
 var app = express();
 var port = process.env.PORT || 3000;
 
@@ -31,6 +33,9 @@ fs.readdirSync(join(__dirname, 'app/models')).forEach(function (file) {
 
 // Bootstrap application settings
 require('./config/express')(app, passport);
+
+//Bootstrap Passport
+require('./config/passport')(passport);
 
 // Bootstrap routes
 require('./config/routes')(app, passport);

@@ -19,9 +19,6 @@ var UserSchema = new Schema({
 
 
 
-
-
-
 /*----------  User Validation Method  ----------*/
 
 UserSchema.path('name').validate(function(name){
@@ -57,8 +54,31 @@ UserSchema.path('password').validate(function(password){
 UserSchema.methods = {
   makeSalt:function(){
    return bcrypt.genSaltSync(SALT_WORK_FACTOR);
+  },
+    authenticate: function(password){
+      
+    return this.encryptPassword(password) == this.password
+  },
+
+  encryptPassword:function(password){
+     return bcrypt.hashSync(password,this.salt);
   }
 };
+
+/*----------  Statics  ----------*/
+
+UserSchema.statics = {
+  load:function(options,cb){
+      options.select = options.select || 'name email';
+      this
+        .findOne(options.criteria)
+        .select(options.select)
+        .exec(cb);
+  }
+};
+
+
+
 
 
 UserSchema.pre('save',function(next){
@@ -69,7 +89,7 @@ UserSchema.pre('save',function(next){
     if(err) return next(err);
     //console.log(hash_password);
     user.password = hash_password;
-    console.log(user);
+    
     next();
   });
   
